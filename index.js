@@ -6,21 +6,16 @@ fi = (function() {
       // check if collection is object or array
       if (Array.isArray(collection)) {
         // arrays
-        let newArray = []
         for (let i = 0; i < collection.length; i++) {
           iteratee(collection[i]);
-          newArray.push(collection[i]);
         }
-        return newArray
       } else {
         // objects
-        let newObject = {}
         for (const key in collection) {
           iteratee(collection[key]);
-          newObject[key] = collection[key];
         }
-        return newObject
       }
+      return collection;
     },
 
     map: function (collection, iteratee) {
@@ -53,7 +48,7 @@ fi = (function() {
     find: function (collection, predicate) {
       for (let i = 0; i < collection.length; i++) {
         if (predicate(collection[i])) {
-          return collection[i]
+          return collection[i];
         }
       }
     },
@@ -82,11 +77,19 @@ fi = (function() {
 
     // array functions
     first: function (array, n) {
-      return array.slice(0, n || 1);
+      if (n === 1 || n === undefined) {
+        return array[0]
+      } else {
+        return array.slice(0, n);
+      }
     },
 
     last: function (array, n) {
-      return array.slice(-n || -1)
+      if (n === 1 || n === undefined) {
+        return array[array.length - 1];
+      } else {
+        return array.slice(-n);
+      }
     },
 
     compact: function (array) {
@@ -180,10 +183,14 @@ fi = (function() {
       for (const key in object) {
         newArray.push(object[key])
       };
+
+      return newArray;
     },
 
     functions: function (object) {
-      return Object.getOwnPropertyNames(object).sort();
+      return Object.getOwnPropertyNames(object).sort(function (a,b) {
+        return a.localeCompare(b);
+      });
     }
 
   // end of top-level return statement
